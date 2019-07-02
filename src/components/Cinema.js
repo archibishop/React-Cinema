@@ -30,19 +30,64 @@ class Cinema extends Component {
             for (var j = 0; j < columns; j++) {
                 // Initializes:
                 if ( i === 0 && j === 0){
-                    arr[i][j] = ''
+                    arr[i][j] = {
+                        display: '',
+                        seatStatus: '',
+                        price: 0,
+                        available: false
+                    }
                 } else if (i === 0 && j === 1) {
-                    arr[i][j] = 1
+                    arr[i][j] = {
+                        display: 1,
+                        seatStatus: '',
+                        price: 0,
+                        available: false
+                    }
                 } else if (i === 0 && j !== 0) {
-                    let x = j - 1
-                    arr[i][j] = arr[i][x] + 1
+                    let x = j - 1;
+                    let displayValue = arr[i][x].display + 1;
+                    arr[i][j] = {
+                        display: displayValue,
+                        seatStatus: '',
+                        price: 0,
+                        available: false
+                    }
                 } else if (j === 0 && i === 1) {
-                    arr[i][j] = 'A'
+                    arr[i][j] = {
+                        display: 'A',
+                        seatStatus: '',
+                        price: 0,
+                        available: true
+                    }
                 } else if (j === 0 && i !== 0) {
                     let x = i - 1
-                    arr[i][j] = this.nextChar(arr[x][j])
+                    let displayChar = this.nextChar(arr[x][j].display)
+                    arr[i][j] = {
+                        display: displayChar,
+                        seatStatus: '',
+                        price: 0,
+                        available: true
+                    }
                 }else {
-                    arr[i][j] = defaultValue;
+
+                    let seatState = '';
+                    if ( i > 0 &&  i < 3 && j > 4 && j < 16){
+                        seatState = 'pair';
+                    } else if (i > 0 && i < 3 && (j < 5 || j > 15)) {
+                        seatState = 'vvip';
+                    } else if ((i > 2 && i < 8)) {
+                        seatState = 'vvip';
+                    } else if (i > 7 && i < 13) {
+                        seatState = 'vip';
+                    }  else if (i > 12) {
+                        seatState = 'economy';
+                    }
+                    arr[i][j] = {
+                        display: defaultValue,
+                        seatStatus: seatState,
+                        price: 0,
+                        available: true
+                    }
                 }
             }
         }
@@ -59,6 +104,7 @@ class Cinema extends Component {
     ))
 
     render() {
+        console.log(this.state.seats)
         return(
             <div className="cinema-table">
                 <table className="table">
