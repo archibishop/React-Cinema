@@ -1,0 +1,9 @@
+Seats
+
+Twin - 25,000
+
+Very VIP - 100,000
+
+VIP - 50,000
+
+Economy - 20,000
