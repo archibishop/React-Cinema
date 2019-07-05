@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import CinemaRow from '../components/CinemaRow';
 import TicketForm from '../components/TicketForm';
 import CinemaDetails from '../components/CinemaDetails';
+import SeatTypeForm from './SeatTypeForm';
+import AvailableSeats from './AvailableSeats';
 
 
 class Cinema extends Component {
 
     state = {
         seats: [],
+        available_seats: [],
         text: '',
         total_tickets_sold: 0,
         total_revenue: 0
@@ -170,6 +173,40 @@ class Cinema extends Component {
         return seatRowIndex;
     }
 
+    getAvailableSeats = (num, seatType) => {
+        if (num < 1) {
+            alert(`You can't check 0 seats`);
+            return;
+        }
+        let newfilterSeats;
+        let seatsSelected = [];
+
+        let filterSeats = this.state.seats.map((seatList , index) => {
+            let lis = seatList.map((seat, key) => {
+                if (seat.available === true && seat.seatStatus === seatType) {
+                    let value;
+                    if (index === 1 ) {
+                        value = `A-${key},  ${seat.price}`
+                    } else {
+                        value = `${this.nextCharAvailable(index)}-${key}  ${seat.price}`
+                    }
+                    seatsSelected.push(value)
+                }
+                
+                return seatsSelected
+            })
+            return lis
+        })
+        newfilterSeats = filterSeats[0][0]
+        this.setState( {
+            available_seats: newfilterSeats
+        })
+    }
+
+    nextCharAvailable = (c) => {
+        return String.fromCharCode('A'.charCodeAt(0) + (c - 1));
+    }
+
     render() {
         return(
             <div className="cinema-table">
@@ -180,6 +217,8 @@ class Cinema extends Component {
                 </table>
                 <CinemaDetails revenue={this.state.total_revenue} ticketsSold={this.state.total_tickets_sold}/>
                 <TicketForm sellTicket={this.sellTicket}/> 
+                <SeatTypeForm availableSeats={this.getAvailableSeats}/>
+                <AvailableSeats seats={this.state.available_seats}/>
             </div>
         );
     };
